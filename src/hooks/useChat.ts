@@ -72,8 +72,8 @@ export function useChat() {
             );
           }
         }
-      }, 30);
-    }, 400);
+      }, 10);
+    }, 150);
   };
 
   const clearMessages = () => setMessages([]);

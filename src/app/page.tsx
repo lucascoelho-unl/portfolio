@@ -44,29 +44,33 @@ export default function Home() {
 
   return (
     <div 
-      className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/20 selection:text-indigo-600 transition-colors duration-300 relative overflow-x-hidden"
-      style={{ backgroundColor: "var(--bg-page)", color: "var(--text-primary)" }}
+      className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/20 selection:text-indigo-600 transition-colors duration-300 relative overflow-x-hidden pointer-events-none"
+      style={{ color: "var(--text-primary)" }}
     >
       <BackgroundGlow />
 
-      <Header 
-        theme={theme}
-        toggleTheme={toggleTheme}
-        hasMessages={hasMessages}
-        onClearChat={clearMessages}
-      />
+      <div className="pointer-events-auto relative z-50">
+        <Header 
+          theme={theme}
+          toggleTheme={toggleTheme}
+          hasMessages={hasMessages}
+          onClearChat={clearMessages}
+        />
+      </div>
 
       {/* Main Layout Area */}
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 flex flex-col justify-between z-10 py-6">
         
         {/* Unified Layout Wrapper */}
-        <div className={`flex-1 flex flex-col ${!hasMessages ? "items-center justify-center my-auto gap-8 text-center" : "justify-between"}`}>
+        <div className={`flex-1 flex flex-col ${!hasMessages ? "items-center justify-center my-auto pb-[15vh] gap-8 text-center" : "justify-between"}`}>
           
-          <Hero isVisible={!hasMessages} />
+          <div className="pointer-events-auto">
+            <Hero isVisible={!hasMessages} />
+          </div>
 
           {/* Conversation Feed Stream */}
           {hasMessages && (
-            <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-2 pr-1 mb-4">
+            <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-2 pr-1 mb-4 pointer-events-auto">
               {chatReady && (
                 <AnimatePresence>
                   {messages.map((msg) => (
@@ -75,7 +79,7 @@ export default function Home() {
                       initial={msg.sender === "user" ? { opacity: 0 } : false}
                       animate={msg.sender === "user" ? { opacity: 1 } : false}
                       transition={msg.sender === "user" ? { 
-                        duration: !isFirstRenderComplete ? 1.2 : 0.7, 
+                        duration: !isFirstRenderComplete ? 0.6 : 0.3, 
                         ease: [0.25, 0.46, 0.45, 0.94],
                       } : undefined}
                       onAnimationComplete={msg.sender === "user" ? () => setIsFirstRenderComplete(true) : undefined}
@@ -145,7 +149,7 @@ export default function Home() {
                 setChatReady(true);
               }
             }}
-            className={`w-full z-20 ${!hasMessages ? "max-w-2xl" : "sticky bottom-4"}`}
+            className={`w-full z-20 pointer-events-auto ${!hasMessages ? "max-w-2xl" : "sticky bottom-4"}`}
           >
             <FloatingChat
               input={input}

@@ -5,6 +5,107 @@ interface HeroProps {
   isVisible: boolean;
 }
 
+const HeroIcon = () => {
+  return (
+    <div className="relative w-32 h-32 flex items-center justify-center">
+      <motion.svg
+        viewBox="0 0 100 100"
+        className="w-full h-full drop-shadow-xl overflow-visible"
+      >
+        <defs>
+          <linearGradient id="orbit-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#3b82f6" />
+            <stop offset="100%" stopColor="#8b5cf6" />
+          </linearGradient>
+          <linearGradient id="orbit-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ec4899" />
+            <stop offset="100%" stopColor="#8b5cf6" />
+          </linearGradient>
+
+          <filter id="core-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        {/* Global rotation for the entire system */}
+        <motion.g
+          style={{ transformOrigin: "50px 50px" }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+        >
+          {/* Orbits */}
+          {[0, 1, 2].map((i) => (
+            <motion.g
+              key={i}
+              style={{ transformOrigin: "50px 50px" }}
+              initial={{ rotate: i * 60 }}
+            >
+              {/* The elliptical orbit */}
+              <motion.ellipse
+                cx="50"
+                cy="50"
+                rx="40"
+                ry="15"
+                fill="none"
+                stroke={i % 2 === 0 ? "url(#orbit-grad-1)" : "url(#orbit-grad-2)"}
+                strokeWidth="1.5"
+                className="opacity-70"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 2, ease: "easeInOut", delay: i * 0.4 }}
+              />
+
+              {/* Traveling dot along the orbit */}
+              <circle r="2.5" fill="#ffffff" filter="url(#core-glow)">
+                <animateMotion
+                  dur={`${4 + i}s`}
+                  repeatCount="indefinite"
+                  path="M 10,50 A 40,15 0 1,0 90,50 A 40,15 0 1,0 10,50"
+                />
+              </circle>
+            </motion.g>
+          ))}
+
+          {/* Central pulsating core */}
+          <motion.circle
+            cx="50"
+            cy="50"
+            r="8"
+            fill="url(#orbit-grad-1)"
+            filter="url(#core-glow)"
+            animate={{ scale: [0.8, 1.1, 0.8] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.circle
+            cx="50"
+            cy="50"
+            r="3"
+            fill="#ffffff"
+            animate={{ scale: [1.2, 0.8, 1.2] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* Subtle outer geometric ring */}
+          <motion.circle
+            cx="50"
+            cy="50"
+            r="46"
+            fill="none"
+            stroke="url(#orbit-grad-2)"
+            strokeWidth="0.5"
+            strokeDasharray="2 6"
+            animate={{ rotate: -360 }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            style={{ transformOrigin: "50px 50px" }}
+            className="opacity-40"
+          />
+        </motion.g>
+      </motion.svg>
+    </div>
+  );
+};
+
 export default function Hero({ isVisible }: HeroProps) {
   return (
     <AnimatePresence mode="popLayout">
@@ -13,32 +114,19 @@ export default function Hero({ isVisible }: HeroProps) {
           key="hero-header"
           layout
           initial={{ opacity: 1 }}
-          exit={{ 
-            opacity: 0, 
-            transition: { duration: 0.1, ease: "easeOut" } 
+          exit={{
+            opacity: 0,
+            transition: { duration: 0.1, ease: "easeOut" }
           }}
-          className="flex flex-col items-center justify-center gap-6 w-full overflow-hidden text-center"
+          className="flex flex-col items-center justify-center gap-6 w-full overflow-hidden text-center mt-12"
         >
-          {/* Animated Radiant Flower Logo Icon */}
-          <div className="relative flex items-center justify-center">
-            <div className="absolute w-28 h-28 bg-gradient-to-tr from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-2xl animate-breathe" />
-            
-            <div className="w-16 h-16 relative flex items-center justify-center animate-spin-slow">
-              <div className="absolute w-3.5 h-7 rounded-full bg-indigo-500 transform rotate-0 -translate-y-4 shadow-sm" />
-              <div className="absolute w-3.5 h-7 rounded-full bg-indigo-600 transform rotate-45 -translate-y-3 translate-x-3 shadow-sm" />
-              <div className="absolute w-3.5 h-7 rounded-full bg-purple-500 transform rotate-90 translate-x-4 shadow-sm" />
-              <div className="absolute w-3.5 h-7 rounded-full bg-purple-600 transform rotate-135 translate-y-3 translate-x-3 shadow-sm" />
-              <div className="absolute w-3.5 h-7 rounded-full bg-pink-500 transform rotate-180 translate-y-4 shadow-sm" />
-              <div className="absolute w-3.5 h-7 rounded-full bg-pink-600 transform rotate-225 translate-y-3 -translate-x-3 shadow-sm" />
-              <div className="absolute w-3.5 h-7 rounded-full bg-indigo-400 transform rotate-270 -translate-x-4 shadow-sm" />
-              <div className="absolute w-3.5 h-7 rounded-full bg-indigo-500 transform rotate-315 -translate-y-3 -translate-x-3 shadow-sm" />
-            </div>
-          </div>
+          {/* Custom Animated Hero Icon */}
+          <HeroIcon />
 
           {/* Title Copy */}
-          <div className="flex flex-col gap-2 max-w-xl">
+          <div className="flex flex-col gap-2 max-w-xl mt-4">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
-              Hi, let&apos;s explore Lucas Coelho&apos;s journey & work
+              Hi, let&apos;s explore Lucas Coelho&apos;s journey!
             </h1>
             <p className="text-xs sm:text-sm" style={{ color: "var(--text-muted)" }}>
               Ask anything to get started.
