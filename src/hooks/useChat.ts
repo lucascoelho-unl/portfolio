@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useChat as useAiChat } from "@ai-sdk/react";
-import type { ChatMessage } from "../types/chat";
 
 export function useChat() {
-  const { 
-    messages: aiMessages, 
-    sendMessage, 
-    setMessages: setAiMessages, 
+  const {
+    messages: aiMessages,
+    sendMessage,
+    setMessages: setAiMessages,
     status
   } = useAiChat({
     onError: (err) => {
@@ -29,7 +28,7 @@ export function useChat() {
     if (!query) return;
 
     if (!textToSend) setInput("");
-    
+
     await sendMessage({
       text: query,
     });
