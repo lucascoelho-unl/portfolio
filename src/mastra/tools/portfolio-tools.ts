@@ -1,0 +1,58 @@
+import { createTool } from '@mastra/core/tools';
+import { z } from 'zod';
+
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  techStack: string[];
+  githubUrl?: string;
+  demoUrl?: string;
+}
+
+export const getPortfolioProjectsTool = createTool({
+  id: 'get-portfolio-projects',
+  description: 'Get list of featured portfolio projects and work experience',
+  inputSchema: z.object({
+    category: z.string().optional().describe('Optional category filter e.g. web, ai, mobile'),
+  }),
+  outputSchema: z.object({
+    projects: z.array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        description: z.string(),
+        techStack: z.array(z.string()),
+        githubUrl: z.string().optional(),
+        demoUrl: z.string().optional(),
+      })
+    ),
+  }),
+  execute: async ({ category }) => {
+    // Template data - replace with your own projects or DB query
+    const allProjects: Project[] = [
+      {
+        id: '1',
+        title: 'Generative UI Portfolio',
+        description: 'An AI-powered portfolio with dynamic component streaming and interactive agent chat.',
+        techStack: ['Next.js', 'React', 'Mastra', 'TailwindCSS'],
+        githubUrl: 'https://github.com/example/portfolio',
+      },
+      {
+        id: '2',
+        title: 'Agentic Workflow Engine',
+        description: 'Automated workflow orchestration system built with Mastra and AI agents.',
+        techStack: ['TypeScript', 'Mastra', 'Node.js', 'DuckDB'],
+        githubUrl: 'https://github.com/example/agentic-engine',
+      },
+    ];
+
+    const filtered = category
+      ? allProjects.filter((p) =>
+          p.techStack.some((t) => t.toLowerCase().includes(category.toLowerCase()))
+        )
+      : allProjects;
+
+    return { projects: filtered };
+  },
+});
