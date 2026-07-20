@@ -19,8 +19,8 @@ export default function FluidBackground({ isActive = true }: { isActive?: boolea
           SIM_RESOLUTION: 128,
           DYE_RESOLUTION: 1024,
           CAPTURE_RESOLUTION: 512,
-          DENSITY_DISSIPATION: 1.5,
-          VELOCITY_DISSIPATION: 0.8,
+          DENSITY_DISSIPATION: 0.5,
+          VELOCITY_DISSIPATION: 0.2,
           PRESSURE: 0.6,
           PRESSURE_ITERATIONS: 20,
           CURL: 5,
@@ -52,7 +52,7 @@ export default function FluidBackground({ isActive = true }: { isActive?: boolea
     >
       <canvas
         ref={canvasRef}
-        className={`w-full h-full opacity-20 dark:opacity-30 ${isActive ? 'pointer-events-auto' : 'pointer-events-none'}`}
+        className={`w-full h-full opacity-40 dark:opacity-50 ${isActive ? 'pointer-events-auto' : 'pointer-events-none'}`}
       />
     </div>
   );
