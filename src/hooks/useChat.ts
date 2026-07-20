@@ -7,10 +7,8 @@ export function useChat() {
     messages: aiMessages, 
     sendMessage, 
     setMessages: setAiMessages, 
-    isLoading
+    status
   } = useAiChat({
-    api: "/api/chat",
-    initialMessages: [],
     onError: (err) => {
       // Append the fallback message permanently to the chat history
       setAiMessages((currentMessages) => [
@@ -18,7 +16,7 @@ export function useChat() {
         {
           id: `error-${Date.now()}`,
           role: 'assistant',
-          content: "I'm currently experiencing high traffic and have run out of API quota. Please check back later!"
+          parts: [{ type: 'text', text: "I'm currently experiencing high traffic and have run out of API quota. Please check back later!" }]
         }
       ]);
     }
@@ -33,8 +31,7 @@ export function useChat() {
     if (!textToSend) setInput("");
     
     await sendMessage({
-      role: "user",
-      content: query,
+      text: query,
     });
   };
 
@@ -47,6 +44,6 @@ export function useChat() {
     handleSendMessage,
     clearMessages,
     hasMessages: aiMessages.length > 0,
-    isLoading,
+    isLoading: status === 'submitted' || status === 'streaming',
   };
 }

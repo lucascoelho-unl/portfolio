@@ -2,10 +2,10 @@ import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HeroIcon } from "./Hero";
 import SkillsComponent from "./SkillsComponent";
-import { Message } from "@ai-sdk/react";
+import { UIMessage } from "ai";
 
 interface ChatFeedProps {
-  messages: Message[];
+  messages: UIMessage[];
   chatReady: boolean;
   clearMessages: () => void;
   isFirstRenderComplete: boolean;
@@ -76,13 +76,17 @@ export default function ChatFeed({
                     : { color: "var(--text-primary)" }
                 }
               >
-                {msg.content && <p className="whitespace-pre-line">{msg.content}</p>}
-
-                {msg.toolInvocations?.map((toolInvocation) => {
-                  if (toolInvocation.toolName === "show-skills" && "result" in toolInvocation) {
+                {msg.parts?.map((part, index) => {
+                  if (part.type === 'text') {
+                    return <p key={index} className="whitespace-pre-line">{part.text}</p>;
+                  }
+                  if (
+                    (part.type === 'tool-show-skills' || (part.type === 'dynamic-tool' && part.toolName === 'show-skills')) &&
+                    part.state === 'output-available'
+                  ) {
                     return (
-                      <div key={toolInvocation.toolCallId} className="mt-4">
-                        <SkillsComponent categories={toolInvocation.result.categories} />
+                      <div key={part.toolCallId} className="mt-4">
+                        <SkillsComponent categories={(part.output as any).categories} />
                       </div>
                     );
                   }

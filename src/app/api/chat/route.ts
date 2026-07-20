@@ -19,12 +19,12 @@ export async function POST(req: Request) {
       execute: async ({ writer }) => {
         try {
           for await (const part of toAISdkStream(stream, { from: 'agent' })) {
-            await writer.write(part);
+            await writer.write(part as any);
           }
         } catch (streamError: any) {
           // If the stream fails midway due to quota
           if (streamError?.statusCode === 429 || streamError?.message?.includes('429') || streamError?.message?.includes('Quota')) {
-            await writer.write({ type: 'text-delta', textDelta: `\n\n[Error: ${QUOTA_FALLBACK_MESSAGE}]` });
+            await writer.write({ type: 'text-delta', textDelta: `\n\n[Error: ${QUOTA_FALLBACK_MESSAGE}]` } as any);
           } else {
             console.error('Streaming error:', streamError);
           }
