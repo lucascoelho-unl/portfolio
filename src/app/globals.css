@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg-page: #f8fafc;
+    --bg-header: rgba(255, 255, 255, 0.8);
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --bg-pill: #f1f5f9;
+    --bg-pill-hover: #e2e8f0;
+    --border-main: rgba(226, 232, 240, 0.9);
+    --border-subtle: rgba(241, 245, 249, 0.8);
+    --border-highlight: rgba(99, 102, 241, 0.4);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent-indigo: #4f46e5;
+    --accent-indigo-hover: #4338ca;
+    --accent-pill-bg: #eef2ff;
+    --accent-pill-text: #4338ca;
+    --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.04);
+    --glow-opacity: 0.35;
+  }
+
+  .dark {
+    --bg-page: #090a0f;
+    --bg-header: rgba(9, 10, 15, 0.85);
+    --bg-card: rgba(18, 20, 29, 0.95);
+    --bg-card-hover: rgba(26, 29, 42, 0.95);
+    --bg-pill: rgba(255, 255, 255, 0.05);
+    --bg-pill-hover: rgba(255, 255, 255, 0.1);
+    --border-main: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --border-highlight: rgba(129, 140, 248, 0.5);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-indigo: #6366f1;
+    --accent-indigo-hover: #4f46e5;
+    --accent-pill-bg: rgba(99, 102, 241, 0.12);
+    --accent-pill-text: #818cf8;
+    --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+    --glow-opacity: 0.6;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Custom theme scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-main);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Radiant Meta Petals Animation */
+@keyframes spinSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseBreathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 30s linear infinite;
+}
+
+.animate-breathe {
+  animation: pulseBreathe 4s ease-in-out infinite;
 }

@@ -1,153 +1,137 @@
-export interface ProjectItem {
-  id: string;
-  title: string;
-  description: string;
-  tags: string[];
-  link?: string;
-}
+"use client";
 
-const TEMPLATE_PROJECTS: ProjectItem[] = [
-  {
-    id: "1",
-    title: "Generative UI Portfolio",
-    description: "An interactive portfolio application featuring streaming AI components and real-time agent responses.",
-    tags: ["Next.js", "React", "Mastra", "TailwindCSS"],
-    link: "#",
-  },
-  {
-    id: "2",
-    title: "Agentic Workflow Orchestrator",
-    description: "Automated multi-agent workflow runner leveraging LLMs for structured task execution.",
-    tags: ["TypeScript", "Mastra", "DuckDB", "Node.js"],
-    link: "#",
-  },
-  {
-    id: "3",
-    title: "Interactive Data Platform",
-    description: "Real-time analytics dashboard with dynamic data visualizations and responsive UI.",
-    tags: ["Next.js", "TailwindCSS", "TypeScript"],
-    link: "#",
-  },
-];
-
-const TEMPLATE_SKILLS = [
-  "TypeScript",
-  "React / Next.js",
-  "Tailwind CSS",
-  "Node.js",
-  "Mastra AI",
-  "Generative UI",
-  "REST / GraphQL",
-  "PostgreSQL / SQL",
-];
+import React, { useState, useEffect } from "react";
+import FloatingChat from "./components/FloatingChat";
+import BackgroundGlow from "./components/BackgroundGlow";
 
 export default function Home() {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    // Sync theme class with HTML element
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
   return (
-    <main className="flex-1 max-w-5xl w-full mx-auto px-6 py-12 flex flex-col gap-16">
-      {/* Hero Section Template */}
-      <section className="flex flex-col items-start gap-4 py-8 border-b border-zinc-800">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-          <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-          Available for new opportunities
-        </div>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
-          Developer Portfolio & AI Agent Hub
-        </h1>
-        <p className="text-lg text-zinc-400 max-w-2xl">
-          Welcome to my portfolio! Built with Next.js App Router and Mastra AI engine. 
-          Explore projects, view technical skills, or interact with the embedded AI assistant.
-        </p>
-        <div className="flex gap-4 pt-2">
-          <a
-            href="#projects"
-            className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-colors text-sm"
-          >
-            View Projects
-          </a>
-          <a
-            href="#contact"
-            className="px-5 py-2.5 rounded-lg border border-zinc-700 hover:bg-zinc-800 text-zinc-300 font-medium transition-colors text-sm"
-          >
-            Contact Me
-          </a>
-        </div>
-      </section>
+    <div 
+      className="min-h-screen flex flex-col justify-between font-sans selection:bg-indigo-500/20 selection:text-indigo-600 transition-colors duration-300"
+      style={{ backgroundColor: "var(--bg-page)", color: "var(--text-primary)" }}
+    >
+      <BackgroundGlow />
 
-      {/* Featured Projects Section Template */}
-      <section id="projects" className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-semibold text-white">Featured Projects</h2>
-          <p className="text-sm text-zinc-400">
-            A selection of recent work and technical experiments.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TEMPLATE_PROJECTS.map((project) => (
-            <div
-              key={project.id}
-              className="flex flex-col justify-between p-6 rounded-xl bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 transition-all group"
-            >
-              <div className="flex flex-col gap-3">
-                <h3 className="text-lg font-medium text-white group-hover:text-indigo-400 transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  {project.description}
-                </p>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-1.5">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2.5 py-0.5 rounded text-xs font-mono bg-zinc-800 text-zinc-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+      {/* Header Navigation Bar */}
+      <header 
+        className="w-full px-6 py-4 flex items-center justify-between border-b backdrop-blur-md sticky top-0 z-20 transition-colors duration-300"
+        style={{
+          backgroundColor: "var(--bg-header)",
+          borderColor: "var(--border-main)",
+        }}
+      >
+        <div className="flex items-center gap-8">
+          {/* Logo / Brand Icon */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center font-bold text-white text-xs shadow-sm">
+              LC
             </div>
-          ))}
-        </div>
-      </section>
+            <span className="font-semibold text-sm tracking-tight" style={{ color: "var(--text-primary)" }}>
+              Lucas Coelho
+            </span>
+          </div>
 
-      {/* Skills & Technologies Section Template */}
-      <section className="flex flex-col gap-6 py-6 border-t border-zinc-800">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-semibold text-white">Tech Stack & Skills</h2>
-          <p className="text-sm text-zinc-400">
-            Core technologies and tools used across my projects.
+          {/* Nav Links */}
+          <nav className="hidden md:flex items-center gap-6 text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
+            <a href="#projects" className="hover:opacity-100 opacity-80 transition-opacity">Projects</a>
+            <a href="#stack" className="hover:opacity-100 opacity-80 transition-opacity">Tech Stack</a>
+            <a href="#architecture" className="hover:opacity-100 opacity-80 transition-opacity">AI Architecture</a>
+            <a href="#about" className="hover:opacity-100 opacity-80 transition-opacity">About</a>
+            <a href="#contact" className="hover:opacity-100 opacity-80 transition-opacity">Contact</a>
+          </nav>
+        </div>
+
+        {/* Right Section: Theme Toggle Button + User Avatar */}
+        <div className="flex items-center gap-3">
+          {/* Light / Dark Mode Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full border transition-all hover:scale-105 active:scale-95"
+            style={{
+              backgroundColor: "var(--bg-pill)",
+              borderColor: "var(--border-main)",
+              color: "var(--text-secondary)",
+            }}
+            title={`Active Theme: ${theme === "dark" ? "Dark" : "Light"}`}
+            aria-label="Toggle visual theme"
+          >
+            {theme === "dark" ? (
+              // Moon icon representing Dark mode
+              <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            ) : (
+              // Sun icon representing Light mode
+              <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            )}
+          </button>
+
+          {/* Profile Avatar */}
+          <div 
+            className="w-8 h-8 rounded-full border flex items-center justify-center font-semibold text-xs transition-colors"
+            style={{
+              backgroundColor: "var(--bg-pill)",
+              borderColor: "var(--border-main)",
+              color: "var(--text-primary)",
+            }}
+          >
+            L
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-12 flex flex-col items-center justify-center gap-8 z-10 my-auto">
+        
+        {/* Animated Radiant Flower Logo Icon (Meta AI style) */}
+        <div className="relative flex items-center justify-center">
+          <div className="absolute w-28 h-28 bg-gradient-to-tr from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-2xl animate-breathe" />
+          
+          <div className="w-16 h-16 relative flex items-center justify-center animate-spin-slow">
+            <div className="absolute w-3.5 h-7 rounded-full bg-indigo-500 transform rotate-0 -translate-y-4 shadow-sm" />
+            <div className="absolute w-3.5 h-7 rounded-full bg-indigo-600 transform rotate-45 -translate-y-3 translate-x-3 shadow-sm" />
+            <div className="absolute w-3.5 h-7 rounded-full bg-purple-500 transform rotate-90 translate-x-4 shadow-sm" />
+            <div className="absolute w-3.5 h-7 rounded-full bg-purple-600 transform rotate-135 translate-y-3 translate-x-3 shadow-sm" />
+            <div className="absolute w-3.5 h-7 rounded-full bg-pink-500 transform rotate-180 translate-y-4 shadow-sm" />
+            <div className="absolute w-3.5 h-7 rounded-full bg-pink-600 transform rotate-225 translate-y-3 -translate-x-3 shadow-sm" />
+            <div className="absolute w-3.5 h-7 rounded-full bg-indigo-400 transform rotate-270 -translate-x-4 shadow-sm" />
+            <div className="absolute w-3.5 h-7 rounded-full bg-indigo-500 transform rotate-315 -translate-y-3 -translate-x-3 shadow-sm" />
+          </div>
+        </div>
+
+        {/* Title Copy */}
+        <div className="text-center flex flex-col gap-2 max-w-xl">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
+            Hi, let's explore Lucas Coelho's journey & work
+          </h1>
+          <p className="text-xs sm:text-sm" style={{ color: "var(--text-muted)" }}>
+            Ask anything to get started.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {TEMPLATE_SKILLS.map((skill) => (
-            <span
-              key={skill}
-              className="px-3.5 py-1.5 rounded-lg text-sm bg-zinc-900 border border-zinc-800 text-zinc-200"
-            >
-              {skill}
-            </span>
-          ))}
+        {/* Static Round Chat Box */}
+        <div className="w-full">
+          <FloatingChat />
         </div>
-      </section>
-
-      {/* Contact Section Template */}
-      <section id="contact" className="flex flex-col gap-4 py-8 border-t border-zinc-800">
-        <h2 className="text-2xl font-semibold text-white">Get in Touch</h2>
-        <p className="text-sm text-zinc-400 max-w-xl">
-          Interested in collaborating or discussing a project? Feel free to reach out.
-        </p>
-        <div className="flex gap-4 pt-2">
-          <a
-            href="mailto:contact@example.com"
-            className="px-5 py-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium transition-colors text-sm"
-          >
-            Send Email
-          </a>
-        </div>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }
