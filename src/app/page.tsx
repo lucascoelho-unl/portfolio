@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import FloatingChat from "./components/FloatingChat";
-import BackgroundGlow from "./components/BackgroundGlow";
-import Header from "./components/Header";
-import Hero from "./components/Hero";
+import FloatingChat from "../components/FloatingChat";
+import BackgroundGlow from "../components/BackgroundGlow";
+import Header from "../components/Header";
+import Hero from "../components/Hero";
 import { useChat } from "../hooks/useChat";
 
 export default function Home() {
