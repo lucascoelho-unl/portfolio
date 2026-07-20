@@ -23,6 +23,7 @@ export default function Home() {
     handleSendMessage,
     clearMessages,
     hasMessages,
+    appendDemoComponent,
   } = useChat();
 
   useEffect(() => {
@@ -73,6 +74,7 @@ export default function Home() {
               clearMessages={clearMessages}
               isFirstRenderComplete={isFirstRenderComplete}
               setIsFirstRenderComplete={setIsFirstRenderComplete}
+              appendDemoComponent={appendDemoComponent}
             />
           )}
 

@@ -10,6 +10,7 @@ interface ChatFeedProps {
   clearMessages: () => void;
   isFirstRenderComplete: boolean;
   setIsFirstRenderComplete: (val: boolean) => void;
+  appendDemoComponent?: (componentName: string) => void;
 }
 
 export default function ChatFeed({
@@ -18,6 +19,7 @@ export default function ChatFeed({
   clearMessages,
   isFirstRenderComplete,
   setIsFirstRenderComplete,
+  appendDemoComponent,
 }: ChatFeedProps) {
   const feedEndRef = useRef<HTMLDivElement>(null);
 
@@ -93,6 +95,18 @@ export default function ChatFeed({
                   // Add other tools here in the future
                   return null;
                 })}
+
+                {(msg.metadata as any)?.isFallback && appendDemoComponent && (
+                  <div className="flex gap-2 mt-4 flex-wrap">
+                    <button
+                      onClick={() => appendDemoComponent('skills')}
+                      className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors"
+                    >
+                      Show Skills Component
+                    </button>
+                    {/* Add more buttons here later */}
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
