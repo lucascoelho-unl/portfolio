@@ -1,5 +1,6 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
+import { skillsData } from '../../data/skills';
 
 export interface Project {
   id: string;
@@ -54,5 +55,23 @@ export const getPortfolioProjectsTool = createTool({
       : allProjects;
 
     return { projects: filtered };
+  },
+});
+
+export const showSkillsTool = createTool({
+  id: 'show-skills',
+  description: 'Displays the developer\'s skills and expertise broken down by category. Use this tool whenever the user asks about skills, stack, technologies, or expertise.',
+  inputSchema: z.object({}),
+  outputSchema: z.object({
+    categories: z.array(
+      z.object({
+        title: z.string(),
+        icon: z.string().optional(),
+        skills: z.array(z.string()),
+      })
+    ),
+  }),
+  execute: async () => {
+    return { categories: skillsData };
   },
 });

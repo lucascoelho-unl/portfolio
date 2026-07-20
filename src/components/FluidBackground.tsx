@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 
-export default function FluidBackground() {
+export default function FluidBackground({ isActive = true }: { isActive?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const initialized = useRef(false);
 
@@ -47,10 +47,12 @@ export default function FluidBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none w-full h-full overflow-hidden">
+    <div 
+      className={`fixed inset-0 z-0 pointer-events-none w-full h-full overflow-hidden transition-opacity duration-1000 ${isActive ? 'opacity-100' : 'opacity-0'}`}
+    >
       <canvas
         ref={canvasRef}
-        className="w-full h-full opacity-20 dark:opacity-30 pointer-events-auto"
+        className={`w-full h-full opacity-20 dark:opacity-30 ${isActive ? 'pointer-events-auto' : 'pointer-events-none'}`}
       />
     </div>
   );

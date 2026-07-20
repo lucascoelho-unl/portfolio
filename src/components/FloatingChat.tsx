@@ -45,7 +45,7 @@ export default function FloatingChat({
           <button
             type="button"
             onClick={() => onSendMessage()}
-            disabled={!input.trim()}
+            disabled={!(input || "").trim()}
             className="w-9 h-9 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105 active:scale-95"
             style={{ backgroundColor: "var(--bg-pill)", color: "var(--text-primary)" }}
             aria-label="Send message"
