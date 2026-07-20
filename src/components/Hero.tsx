@@ -132,7 +132,7 @@ export default function Hero({ isVisible, onIconClick }: HeroProps) {
               className="text-xl sm:text-2xl font-bold flex justify-center items-center gap-2 opacity-80"
               style={{ color: "var(--text-primary)" }}
             >
-              Hey, I'm Lucas <span className="text-2xl sm:text-3xl animate-wave origin-bottom-right inline-block">👋</span>
+              Hey, I&apos;m Lucas <span className="text-2xl sm:text-3xl animate-wave origin-bottom-right inline-block">👋</span>
             </p>
             <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight" style={{ color: "var(--text-primary)" }}>
               AI Engineer

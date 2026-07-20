@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { HeroIcon } from "./Hero";
 import SkillsComponent from "./SkillsComponent";
 import { UIMessage } from "ai";
+import { SkillCategory } from "../data/skills";
 
 interface ChatFeedProps {
   messages: UIMessage[];
@@ -88,7 +89,7 @@ export default function ChatFeed({
                   ) {
                     return (
                       <div key={part.toolCallId} className="mt-4">
-                        <SkillsComponent categories={(part.output as any).categories} />
+                        <SkillsComponent categories={(part.output as { categories: SkillCategory[] }).categories} />
                       </div>
                     );
                   }
@@ -96,7 +97,7 @@ export default function ChatFeed({
                   return null;
                 })}
 
-                {(msg.metadata as any)?.isFallback && appendDemoComponent && (
+                {(msg.metadata as { isFallback?: boolean })?.isFallback && appendDemoComponent && (
                   <div className="flex gap-2 mt-4 flex-wrap">
                     <button
                       onClick={() => appendDemoComponent('skills')}

@@ -1,12 +1,12 @@
 import { mastra } from '../../../mastra';
-import { createUIMessageStream, createUIMessageStreamResponse } from 'ai';
+import { createUIMessageStream, createUIMessageStreamResponse, UIMessage, UIMessageChunk } from 'ai';
 import { toAISdkStream } from '@mastra/ai-sdk';
 
 // TODO: Customize this fallback message for when the AI API quota is exceeded.
 const QUOTA_FALLBACK_MESSAGE = "I'm currently experiencing high traffic and have run out of API quota. Please check back later!";
 
 export async function POST(req: Request) {
-  let messages: any[] = [];
+  let messages: UIMessage[] = [];
   try {
     const body = await req.json();
     messages = body.messages || [];
@@ -19,12 +19,14 @@ export async function POST(req: Request) {
       execute: async ({ writer }) => {
         try {
           for await (const part of toAISdkStream(stream, { from: 'agent' })) {
-            await writer.write(part as any);
+            await writer.write(part as UIMessageChunk);
           }
-        } catch (streamError: any) {
+        } catch (streamError: unknown) {
           // If the stream fails midway due to quota
-          if (streamError?.statusCode === 429 || streamError?.message?.includes('429') || streamError?.message?.includes('Quota')) {
-            await writer.write({ type: 'text-delta', textDelta: `\n\n[Error: ${QUOTA_FALLBACK_MESSAGE}]` } as any);
+          const errorObj = streamError as Record<string, unknown>;
+          const msg = String(errorObj?.message || '');
+          if (errorObj?.statusCode === 429 || msg.includes('429') || msg.includes('Quota')) {
+            await writer.write({ type: 'text-delta', delta: `\n\n[Error: ${QUOTA_FALLBACK_MESSAGE}]`, id: Date.now().toString() } as unknown as UIMessageChunk);
           } else {
             console.error('Streaming error:', streamError);
           }
@@ -35,12 +37,13 @@ export async function POST(req: Request) {
     return createUIMessageStreamResponse({
       stream: uiMessageStream,
     });
-  } catch (error: any) {
-    const errorMsg = error?.message || String(error) || '';
-    const errorData = error?.data ? JSON.stringify(error.data) : '';
+  } catch (error: unknown) {
+    const errorObj = error as Record<string, unknown>;
+    const errorMsg = String(errorObj?.message || error || '');
+    const errorData = errorObj?.data ? JSON.stringify(errorObj.data) : '';
     const isQuotaError = 
-      error?.statusCode === 429 || 
-      error?.status === 429 ||
+      errorObj?.statusCode === 429 || 
+      errorObj?.status === 429 ||
       errorMsg.includes('429') || 
       errorMsg.includes('RESOURCE_EXHAUSTED') || 
       errorMsg.includes('Quota') || 

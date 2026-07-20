@@ -9,7 +9,7 @@ export function useChat() {
     setMessages: setAiMessages,
     status
   } = useAiChat({
-    onError: (err) => {
+    onError: () => {
       // Append the fallback message permanently to the chat history
       setAiMessages((currentMessages) => [
         ...currentMessages,
