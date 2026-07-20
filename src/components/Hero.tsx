@@ -3,11 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface HeroProps {
   isVisible: boolean;
+  onIconClick?: () => void;
 }
 
-const HeroIcon = () => {
+export const HeroIcon = ({ onClick, className }: { onClick?: () => void; className?: string }) => {
   return (
-    <div className="relative w-32 h-32 flex items-center justify-center">
+    <div 
+      className={`relative flex items-center justify-center cursor-pointer transition-transform hover:scale-105 active:scale-95 ${className}`}
+      onClick={onClick}
+    >
       <motion.svg
         viewBox="0 0 100 100"
         className="w-full h-full drop-shadow-xl overflow-visible"
@@ -21,7 +25,7 @@ const HeroIcon = () => {
             <stop offset="0%" stopColor="#ec4899" />
             <stop offset="100%" stopColor="#8b5cf6" />
           </linearGradient>
-
+          
           <filter id="core-glow" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="2" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -36,8 +40,8 @@ const HeroIcon = () => {
         >
           {/* Orbits */}
           {[0, 1, 2].map((i) => (
-            <motion.g
-              key={i}
+            <motion.g 
+              key={i} 
               style={{ transformOrigin: "50px 50px" }}
               initial={{ rotate: i * 60 }}
             >
@@ -55,7 +59,7 @@ const HeroIcon = () => {
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 2, ease: "easeInOut", delay: i * 0.4 }}
               />
-
+              
               {/* Traveling dot along the orbit */}
               <circle r="2.5" fill="#ffffff" filter="url(#core-glow)">
                 <animateMotion
@@ -85,7 +89,7 @@ const HeroIcon = () => {
             animate={{ scale: [1.2, 0.8, 1.2] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
-
+          
           {/* Subtle outer geometric ring */}
           <motion.circle
             cx="50"
@@ -106,7 +110,7 @@ const HeroIcon = () => {
   );
 };
 
-export default function Hero({ isVisible }: HeroProps) {
+export default function Hero({ isVisible, onIconClick }: HeroProps) {
   return (
     <AnimatePresence mode="popLayout">
       {isVisible && (
@@ -114,23 +118,30 @@ export default function Hero({ isVisible }: HeroProps) {
           key="hero-header"
           layout
           initial={{ opacity: 1 }}
-          exit={{
-            opacity: 0,
-            transition: { duration: 0.1, ease: "easeOut" }
+          exit={{ 
+            opacity: 0, 
+            transition: { duration: 0.1, ease: "easeOut" } 
           }}
-          className="flex flex-col items-center justify-center gap-6 w-full overflow-hidden text-center mt-12"
+          className="flex flex-col items-center justify-center gap-6 w-full overflow-hidden text-center mt-4"
         >
-          {/* Custom Animated Hero Icon */}
-          <HeroIcon />
+
 
           {/* Title Copy */}
-          <div className="flex flex-col gap-2 max-w-xl mt-4">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
-              Hi, let&apos;s explore Lucas Coelho&apos;s journey!
-            </h1>
-            <p className="text-xs sm:text-sm" style={{ color: "var(--text-muted)" }}>
-              Ask anything to get started.
+          <div className="flex flex-col gap-1 max-w-xl mb-4">
+            <p 
+              className="text-xl sm:text-2xl font-bold flex justify-center items-center gap-2 opacity-80"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Hey, I'm Lucas <span className="text-2xl sm:text-3xl animate-wave origin-bottom-right inline-block">👋</span>
             </p>
+            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight" style={{ color: "var(--text-primary)" }}>
+              AI Engineer
+            </h1>
+          </div>
+
+          {/* Custom Animated Hero Icon */}
+          <div className="my-2 pointer-events-auto">
+            <HeroIcon className="w-40 h-40" onClick={onIconClick} />
           </div>
         </motion.div>
       )}

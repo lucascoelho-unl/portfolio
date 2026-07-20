@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import FloatingChat from "../components/FloatingChat";
 import BackgroundGlow from "../components/BackgroundGlow";
-import Header from "../components/Header";
-import Hero from "../components/Hero";
+
+import Hero, { HeroIcon } from "../components/Hero";
 import { useChat } from "../hooks/useChat";
 
 export default function Home() {
@@ -49,13 +49,31 @@ export default function Home() {
     >
       <BackgroundGlow />
 
-      <div className="pointer-events-auto relative z-50">
-        <Header 
-          theme={theme}
-          toggleTheme={toggleTheme}
-          hasMessages={hasMessages}
-          onClearChat={clearMessages}
-        />
+      {/* Floating Top Right Actions */}
+      <div className="fixed top-6 right-6 pointer-events-auto z-50 flex items-center gap-3">
+        {/* HeroIcon was here, moved to the feed stream */}
+
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-full border shadow-sm transition-all hover:scale-105 active:scale-95"
+          style={{
+            backgroundColor: "var(--bg-pill)",
+            borderColor: "var(--border-main)",
+            color: "var(--text-secondary)",
+          }}
+          title={`Active Theme: ${theme === "dark" ? "Dark" : "Light"}`}
+          aria-label="Toggle visual theme"
+        >
+          {theme === "dark" ? (
+            <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          )}
+        </button>
       </div>
 
       {/* Main Layout Area */}
@@ -65,12 +83,29 @@ export default function Home() {
         <div className={`flex-1 flex flex-col ${!hasMessages ? "items-center justify-center my-auto pb-[15vh] gap-8 text-center" : "justify-between"}`}>
           
           <div className="pointer-events-auto">
-            <Hero isVisible={!hasMessages} />
+            <Hero 
+              isVisible={!hasMessages} 
+              onIconClick={() => handleSendMessage("Hello! I'd love to learn more about your work.")}
+            />
           </div>
 
           {/* Conversation Feed Stream */}
           {hasMessages && (
             <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-2 pr-1 mb-4 pointer-events-auto">
+              
+              {/* Centered Top Icon for Chat Mode */}
+              <motion.div
+                initial={{ opacity: 0, height: 0, scale: 0.9, marginTop: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: "auto", scale: 1, marginTop: 16, marginBottom: 16 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="flex justify-center items-center w-full shrink-0"
+                title="New Chat"
+              >
+                <HeroIcon 
+                  className="w-16 h-16 opacity-80 hover:opacity-100 transition-opacity" 
+                  onClick={clearMessages}
+                />
+              </motion.div>
               {chatReady && (
                 <AnimatePresence>
                   {messages.map((msg) => (
