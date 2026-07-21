@@ -41,7 +41,7 @@ export default function Home() {
   };
 
   return (
-    <div 
+    <div
       className="h-[100dvh] flex flex-col font-sans selection:bg-indigo-500/20 selection:text-indigo-600 transition-colors duration-300 relative overflow-x-hidden pointer-events-none"
       style={{ color: "var(--text-primary)" }}
     >
@@ -55,22 +55,22 @@ export default function Home() {
 
       {/* Main Layout Area */}
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 flex flex-col justify-between z-10 py-6 min-h-0">
-        
+
         {/* Unified Layout Wrapper */}
         <div className={`flex-1 flex flex-col min-h-0 ${!hasMessages ? "items-center justify-center my-auto pb-[15vh] gap-8 text-center" : "justify-between"}`}>
-          
+
           <div className="pointer-events-none shrink-0">
-            <Hero 
-              isVisible={!hasMessages} 
+            <Hero
+              isVisible={!hasMessages}
               onIconClick={() => handleSendMessage("Hello! I'd love to learn more about your work.")}
             />
           </div>
 
           {/* Conversation Feed Stream */}
           {hasMessages && (
-            <ChatFeed 
-              messages={messages} 
-              chatReady={chatReady} 
+            <ChatFeed
+              messages={messages}
+              chatReady={chatReady}
               clearMessages={clearMessages}
               isFirstRenderComplete={isFirstRenderComplete}
               setIsFirstRenderComplete={setIsFirstRenderComplete}
