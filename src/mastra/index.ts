@@ -5,12 +5,12 @@ import { DuckDBStore } from '@mastra/duckdb';
 import { MastraCompositeStore } from '@mastra/core/storage';
 import { Observability, MastraStorageExporter, MastraPlatformExporter, SensitiveDataFilter } from '@mastra/observability';
 import { portfolioAgent } from './agents/portfolio-agent';
-import { getPortfolioProjectsTool } from './tools/portfolio-tools';
+import { getPortfolioProjectsTool, showSkillsTool, showCarouselTool } from './tools/portfolio-tools';
 import { portfolioInquiryWorkflow } from './workflows/portfolio-workflow';
 
 export const mastra = new Mastra({
   agents: { portfolioAgent },
-  tools: { getPortfolioProjectsTool },
+  tools: { getPortfolioProjectsTool, showSkillsTool, showCarouselTool },
   workflows: { portfolioInquiryWorkflow },
   storage: new MastraCompositeStore({
     id: 'composite-storage',

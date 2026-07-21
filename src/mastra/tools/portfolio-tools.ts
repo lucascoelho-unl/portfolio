@@ -1,15 +1,7 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { skillsData } from '../../data/skills';
-
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  techStack: string[];
-  githubUrl?: string;
-  demoUrl?: string;
-}
+import { Project } from '../../types/agent-components';
 
 export const getPortfolioProjectsTool = createTool({
   id: 'get-portfolio-projects',
@@ -30,7 +22,6 @@ export const getPortfolioProjectsTool = createTool({
     ),
   }),
   execute: async ({ category }) => {
-    // Template data - replace with your own projects or DB query
     const allProjects: Project[] = [
       {
         id: '1',
@@ -73,5 +64,17 @@ export const showSkillsTool = createTool({
   }),
   execute: async () => {
     return { categories: skillsData };
+  },
+});
+
+export const showCarouselTool = createTool({
+  id: 'show-carousel',
+  description: 'Displays an interactive 3D photo carousel featuring developer projects, creations, and visual highlights. Use this tool whenever the user asks to see photos, pictures, images, gallery, or visual work.',
+  inputSchema: z.object({}),
+  outputSchema: z.object({
+    title: z.string().optional(),
+  }),
+  execute: async () => {
+    return { title: 'Featured Gallery' };
   },
 });

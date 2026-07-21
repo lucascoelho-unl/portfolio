@@ -71,6 +71,40 @@ export function useChat() {
           ]
         }
       ]);
+    } else if (componentName === 'projects') {
+      setAiMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: `demo-${Date.now()}`,
+          role: 'assistant', content: '', parts: [
+            {
+              type: 'dynamic-tool',
+              toolCallId: `demo-call-projects-${Date.now()}`,
+              toolName: 'get-portfolio-projects',
+              state: 'output-available',
+              input: {},
+              output: {
+                projects: [
+                  {
+                    id: '1',
+                    title: 'Generative UI Portfolio',
+                    description: 'An AI-powered portfolio with dynamic component streaming and interactive agent chat.',
+                    techStack: ['Next.js', 'React', 'Mastra', 'TailwindCSS'],
+                    githubUrl: 'https://github.com/example/portfolio',
+                  },
+                  {
+                    id: '2',
+                    title: 'Agentic Workflow Engine',
+                    description: 'Automated workflow orchestration system built with Mastra and AI agents.',
+                    techStack: ['TypeScript', 'Mastra', 'Node.js', 'DuckDB'],
+                    githubUrl: 'https://github.com/example/agentic-engine',
+                  },
+                ]
+              },
+            } as any
+          ]
+        }
+      ]);
     }
   };
 

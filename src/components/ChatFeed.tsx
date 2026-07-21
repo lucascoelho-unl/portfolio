@@ -1,10 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HeroIcon } from "./Hero";
-import SkillsComponent from "./SkillsComponent";
-import ImageCarousel from "./ImageCarousel";
+import AgentComponentRegistry from "./agent/AgentComponentRegistry";
 import { UIMessage } from "ai";
-import { SkillCategory } from "../data/skills";
+import { AgentDynamicToolPart } from "../types/agent-components";
 
 interface ChatFeedProps {
   messages: UIMessage[];
@@ -91,54 +90,36 @@ export default function ChatFeed({
                     return <p key={index} className="whitespace-pre-line">{part.text}</p>;
                   }
 
-                  // Cast to access dynamic tool properties
-                  const dynamicPart = part as unknown as { type: string; toolName?: string; toolCallId?: string; state?: string; output?: Record<string, unknown> };
+                  const dynamicPart = part as unknown as AgentDynamicToolPart;
 
-                  // Skills component — matches static 'tool-show-skills' or dynamic-tool with toolName
-                  if (
-                    (dynamicPart.type === 'tool-show-skills') ||
-                    (dynamicPart.type === 'dynamic-tool' && dynamicPart.toolName === 'show-skills')
-                  ) {
-                    return (
-                      <div key={dynamicPart.toolCallId || index} className="mt-4 w-full">
-                        <SkillsComponent categories={
-                          (dynamicPart.output as { categories?: SkillCategory[] })?.categories || []
-                        } />
-                      </div>
-                    );
-                  }
-
-                  // Image carousel — matches static 'tool-show-carousel' or dynamic-tool with toolName
-                  if (
-                    (dynamicPart.type === 'tool-show-carousel') ||
-                    (dynamicPart.type === 'dynamic-tool' && dynamicPart.toolName === 'show-carousel')
-                  ) {
-                    return (
-                      <div key={dynamicPart.toolCallId || index} className="mt-4 w-full">
-                        <ImageCarousel />
-                      </div>
-                    );
-                  }
-
-                  // Add other tools here in the future
-                  return null;
+                  return (
+                    <AgentComponentRegistry
+                      key={dynamicPart.toolCallId || index}
+                      part={dynamicPart}
+                    />
+                  );
                 })}
 
                 {(msg.metadata as { isFallback?: boolean })?.isFallback && appendDemoComponent && (
                   <div className="flex gap-2 mt-4 flex-wrap">
                     <button
                       onClick={() => appendDemoComponent('skills')}
-                      className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors"
+                      className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors text-[var(--text-primary)]"
                     >
                       Show Skills Component
                     </button>
                     <button
                       onClick={() => appendDemoComponent('carousel')}
-                      className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors"
+                      className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors text-[var(--text-primary)]"
                     >
                       Show Image Carousel
                     </button>
-                    {/* Add more buttons here later */}
+                    <button
+                      onClick={() => appendDemoComponent('projects')}
+                      className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors text-[var(--text-primary)]"
+                    >
+                      Show Projects Component
+                    </button>
                   </div>
                 )}
               </div>
