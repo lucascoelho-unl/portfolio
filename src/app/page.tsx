@@ -42,7 +42,7 @@ export default function Home() {
 
   return (
     <div 
-      className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/20 selection:text-indigo-600 transition-colors duration-300 relative overflow-x-hidden pointer-events-none"
+      className="h-[100dvh] flex flex-col font-sans selection:bg-indigo-500/20 selection:text-indigo-600 transition-colors duration-300 relative overflow-x-hidden pointer-events-none"
       style={{ color: "var(--text-primary)" }}
     >
       <FluidBackground isActive={!hasMessages} />
@@ -54,12 +54,12 @@ export default function Home() {
       </div>
 
       {/* Main Layout Area */}
-      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 flex flex-col justify-between z-10 py-6">
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 flex flex-col justify-between z-10 py-6 min-h-0">
         
         {/* Unified Layout Wrapper */}
-        <div className={`flex-1 flex flex-col ${!hasMessages ? "items-center justify-center my-auto pb-[15vh] gap-8 text-center" : "justify-between"}`}>
+        <div className={`flex-1 flex flex-col min-h-0 ${!hasMessages ? "items-center justify-center my-auto pb-[15vh] gap-8 text-center" : "justify-between"}`}>
           
-          <div className="pointer-events-none">
+          <div className="pointer-events-none shrink-0">
             <Hero 
               isVisible={!hasMessages} 
               onIconClick={() => handleSendMessage("Hello! I'd love to learn more about your work.")}
@@ -94,7 +94,7 @@ export default function Home() {
                 setChatReady(true);
               }
             }}
-            className={`w-full z-20 pointer-events-auto ${!hasMessages ? "max-w-2xl" : "sticky bottom-4"}`}
+            className={`w-full z-20 pointer-events-auto shrink-0 ${!hasMessages ? "max-w-2xl" : ""}`}
           >
             <FloatingChat
               input={input}

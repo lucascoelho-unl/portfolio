@@ -14,13 +14,13 @@ export default function FluidBackground({ isActive = true }: { isActive?: boolea
       import("webgl-fluid").then(({ default: fluid }) => {
         if (!canvasRef.current) return;
         fluid(canvasRef.current, {
-          IMMEDIATE: true,
+          IMMEDIATE: false,
           TRIGGER: "hover",
           SIM_RESOLUTION: 128,
           DYE_RESOLUTION: 1024,
           CAPTURE_RESOLUTION: 512,
-          DENSITY_DISSIPATION: 0.5,
-          VELOCITY_DISSIPATION: 0.2,
+          DENSITY_DISSIPATION: 1.5,
+          VELOCITY_DISSIPATION: 0.8,
           PRESSURE: 0.6,
           PRESSURE_ITERATIONS: 20,
           CURL: 5,
@@ -47,7 +47,7 @@ export default function FluidBackground({ isActive = true }: { isActive?: boolea
   }, []);
 
   return (
-    <div 
+    <div
       className={`fixed inset-0 z-0 pointer-events-none w-full h-full overflow-hidden transition-opacity duration-1000 ${isActive ? 'opacity-100' : 'opacity-0'}`}
     >
       <canvas

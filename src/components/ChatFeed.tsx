@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HeroIcon } from "./Hero";
 import SkillsComponent from "./SkillsComponent";
+import ImageCarousel from "./ImageCarousel";
 import { UIMessage } from "ai";
 import { SkillCategory } from "../data/skills";
 
@@ -30,7 +31,13 @@ export default function ChatFeed({
   }, [messages]);
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-2 pr-1 mb-4 pointer-events-auto">
+    <div 
+      className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-2 pr-1 mb-4 pointer-events-auto"
+      style={{
+        maskImage: "linear-gradient(to bottom, black 0%, black calc(100% - 40px), transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, black 0%, black calc(100% - 40px), transparent 100%)"
+      }}
+    >
       {/* Centered Top Icon for Chat Mode */}
       <motion.div
         initial={{ opacity: 0, height: 0, scale: 0.9, marginTop: 0, marginBottom: 0 }}
@@ -71,7 +78,7 @@ export default function ChatFeed({
               {/* Message Bubble Card */}
               <div
                 className={`text-sm leading-relaxed max-w-[90%] sm:max-w-[85%] ${
-                  msg.role === "user" ? "px-5 py-2 rounded-full font-medium" : ""
+                  msg.role === "user" ? "px-5 py-2 rounded-full font-medium" : "w-full"
                 }`}
                 style={
                   msg.role === "user"
@@ -83,16 +90,36 @@ export default function ChatFeed({
                   if (part.type === 'text') {
                     return <p key={index} className="whitespace-pre-line">{part.text}</p>;
                   }
+
+                  // Cast to access dynamic tool properties
+                  const dynamicPart = part as unknown as { type: string; toolName?: string; toolCallId?: string; state?: string; output?: Record<string, unknown> };
+
+                  // Skills component — matches static 'tool-show-skills' or dynamic-tool with toolName
                   if (
-                    (part.type === 'tool-show-skills' || (part.type === 'dynamic-tool' && part.toolName === 'show-skills')) &&
-                    part.state === 'output-available'
+                    (dynamicPart.type === 'tool-show-skills') ||
+                    (dynamicPart.type === 'dynamic-tool' && dynamicPart.toolName === 'show-skills')
                   ) {
                     return (
-                      <div key={part.toolCallId} className="mt-4">
-                        <SkillsComponent categories={(part.output as { categories: SkillCategory[] }).categories} />
+                      <div key={dynamicPart.toolCallId || index} className="mt-4 w-full">
+                        <SkillsComponent categories={
+                          (dynamicPart.output as { categories?: SkillCategory[] })?.categories || []
+                        } />
                       </div>
                     );
                   }
+
+                  // Image carousel — matches static 'tool-show-carousel' or dynamic-tool with toolName
+                  if (
+                    (dynamicPart.type === 'tool-show-carousel') ||
+                    (dynamicPart.type === 'dynamic-tool' && dynamicPart.toolName === 'show-carousel')
+                  ) {
+                    return (
+                      <div key={dynamicPart.toolCallId || index} className="mt-4 w-full">
+                        <ImageCarousel />
+                      </div>
+                    );
+                  }
+
                   // Add other tools here in the future
                   return null;
                 })}
@@ -104,6 +131,12 @@ export default function ChatFeed({
                       className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors"
                     >
                       Show Skills Component
+                    </button>
+                    <button
+                      onClick={() => appendDemoComponent('carousel')}
+                      className="px-4 py-2 text-xs rounded-full border border-[var(--border-color)] hover:bg-[var(--bg-pill)] transition-colors"
+                    >
+                      Show Image Carousel
                     </button>
                     {/* Add more buttons here later */}
                   </div>

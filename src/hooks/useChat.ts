@@ -42,16 +42,32 @@ export function useChat() {
         ...currentMessages,
         {
           id: `demo-${Date.now()}`,
-          role: 'assistant',
-          parts: [
+          role: 'assistant', content: '', parts: [
             {
-              type: 'tool-show-skills',
+              type: 'dynamic-tool',
               toolCallId: `demo-call-${Date.now()}`,
               toolName: 'show-skills',
               state: 'output-available',
               input: {},
-              output: { categories: skillsData }
-            }
+              output: { categories: skillsData },
+            } as any
+          ]
+        }
+      ]);
+    } else if (componentName === 'carousel') {
+      setAiMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: `demo-${Date.now()}`,
+          role: 'assistant', content: '', parts: [
+            {
+              type: 'dynamic-tool',
+              toolCallId: `demo-call-carousel-${Date.now()}`,
+              toolName: 'show-carousel',
+              state: 'output-available',
+              input: {},
+              output: {},
+            } as any
           ]
         }
       ]);

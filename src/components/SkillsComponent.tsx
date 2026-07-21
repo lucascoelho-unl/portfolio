@@ -49,7 +49,7 @@ export default function SkillsComponent({ categories }: { categories: SkillCateg
       className="w-full flex flex-col gap-8 bg-transparent"
     >
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold tracking-tight">Skills & Expertise</h2>
+        <h2 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">Skills & Expertise</h2>
       </div>
 
       <div className="flex flex-col gap-10">
@@ -61,7 +61,7 @@ export default function SkillsComponent({ categories }: { categories: SkillCateg
             transition={{ duration: 0.4, delay: idx * 0.1 }}
             className="flex flex-col gap-4"
           >
-            <div className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-200">
+            <div className="flex items-center gap-2 text-lg font-semibold text-[var(--text-primary)]">
               <CategoryIcon icon={category.icon} />
               <h3>{category.title}</h3>
             </div>
@@ -75,9 +75,9 @@ export default function SkillsComponent({ categories }: { categories: SkillCateg
                   transition={{ duration: 0.3, delay: (idx * 0.1) + (skillIdx * 0.02) }}
                   className="px-3.5 py-1.5 rounded-lg text-sm font-medium border"
                   style={{
-                    backgroundColor: "var(--bg-pill, #111827)",
-                    color: "var(--text-primary, #ffffff)",
-                    borderColor: "var(--border-main, #374151)",
+                    backgroundColor: "var(--bg-pill)",
+                    color: "var(--text-primary)",
+                    borderColor: "var(--border-main)",
                   }}
                 >
                   {skill}
