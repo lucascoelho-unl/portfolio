@@ -8,18 +8,18 @@ import { CAROUSEL_DATA } from "@/data/carousel";
 const variants: Variants = {
   enter: (dir: number) => ({
     opacity: 0,
-    x: dir > 0 ? 200 : -200,
+    y: dir > 0 ? 200 : -200,
     scale: 0.9,
   }),
-  center: (dir: number) => ({
+  center: () => ({
     opacity: 1,
-    x: 0,
+    y: 0,
     scale: 1,
     zIndex: 1,
   }),
   exit: (dir: number) => ({
     opacity: 0,
-    x: dir > 0 ? -200 : 200,
+    y: dir > 0 ? -200 : 200,
     scale: 0.9,
     zIndex: 0,
   }),
@@ -44,8 +44,8 @@ export default function ImageCarousel() {
       style={{
         position: "relative",
         width: "100%",
-        maxWidth: "42rem",
-        height: "400px",
+        maxWidth: "20rem",
+        height: "500px",
         margin: "1rem auto",
         borderRadius: "1.5rem",
         overflow: "hidden",
@@ -64,17 +64,17 @@ export default function ImageCarousel() {
           animate="center"
           exit="exit"
           transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
+            y: { type: "spring", stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 },
             scale: { duration: 0.3 },
           }}
           className="absolute inset-0"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
           dragElastic={0.2}
           onDragEnd={(e, { offset }) => {
-            if (offset.x < -50) paginate(1);
-            else if (offset.x > 50) paginate(-1);
+            if (offset.y < -50) paginate(1);
+            else if (offset.y > 50) paginate(-1);
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -119,31 +119,34 @@ export default function ImageCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation arrows */}
+      {/* Navigation arrows — top and bottom */}
       <button
         onClick={() => paginate(-1)}
-        className="absolute left-4 sm:left-6 z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full backdrop-blur-md bg-black/40 border border-white/20 text-white hover:bg-black/60 hover:scale-105 active:scale-95 transition-all opacity-0 group-hover:opacity-100"
-        style={{ top: "50%", transform: "translateY(-50%)" }}
+        className="absolute z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full backdrop-blur-md bg-black/40 border border-white/20 text-white hover:bg-black/60 hover:scale-105 active:scale-95 transition-all opacity-0 group-hover:opacity-100"
+        style={{ top: "1rem", left: "50%", transform: "translateX(-50%)" }}
         aria-label="Previous Slide"
       >
-        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
+        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" /></svg>
       </button>
       <button
         onClick={() => paginate(1)}
-        className="absolute right-4 sm:right-6 z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full backdrop-blur-md bg-black/40 border border-white/20 text-white hover:bg-black/60 hover:scale-105 active:scale-95 transition-all opacity-0 group-hover:opacity-100"
-        style={{ top: "50%", transform: "translateY(-50%)" }}
+        className="absolute z-20 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full backdrop-blur-md bg-black/40 border border-white/20 text-white hover:bg-black/60 hover:scale-105 active:scale-95 transition-all opacity-0 group-hover:opacity-100"
+        style={{ bottom: "2.5rem", left: "50%", transform: "translateX(-50%)" }}
         aria-label="Next Slide"
       >
-        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
+        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
       </button>
 
-      {/* Dots Indicator */}
-      <div className="absolute bottom-3 left-0 right-0 z-20 flex justify-center gap-2 pointer-events-none">
+      {/* Dots Indicator — vertical on the right side */}
+      <div
+        className="absolute z-20 pointer-events-none"
+        style={{ right: "0.75rem", top: "50%", transform: "translateY(-50%)", display: "flex", flexDirection: "column", gap: "0.5rem" }}
+      >
         {CAROUSEL_DATA.map((_, idx) => (
           <div
             key={idx}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              idx === currentIndex ? "bg-white w-4 shadow-sm" : "bg-white/50 w-1.5"
+            className={`w-1.5 rounded-full transition-all duration-300 ${
+              idx === currentIndex ? "bg-white h-4 shadow-sm" : "bg-white/50 h-1.5"
             }`}
           />
         ))}
