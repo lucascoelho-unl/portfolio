@@ -31,7 +31,9 @@ export async function POST(req: Request) {
       execute: async ({ writer }) => {
         try {
           for await (const part of toAISdkStream(stream, { from: 'agent' })) {
-            console.log('[API ROUTE CHUNK]', JSON.stringify(part));
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[API ROUTE CHUNK]', JSON.stringify(part));
+            }
             await writer.write(part as UIMessageChunk);
           }
         } catch (streamError: unknown) {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useChat as useAiChat } from "@ai-sdk/react";
+import type { UIMessage } from "ai";
 import { skillsData } from "../data/skills";
 
 export function useChat() {
@@ -42,7 +43,9 @@ export function useChat() {
         ...currentMessages,
         {
           id: `demo-${Date.now()}`,
-          role: 'assistant', content: '', parts: [
+          role: 'assistant',
+          content: '',
+          parts: [
             {
               type: 'dynamic-tool',
               toolCallId: `demo-call-${Date.now()}`,
@@ -50,7 +53,7 @@ export function useChat() {
               state: 'output-available',
               input: {},
               output: { categories: skillsData },
-            } as any
+            } as unknown as UIMessage['parts'][number]
           ]
         }
       ]);
@@ -59,7 +62,9 @@ export function useChat() {
         ...currentMessages,
         {
           id: `demo-${Date.now()}`,
-          role: 'assistant', content: '', parts: [
+          role: 'assistant',
+          content: '',
+          parts: [
             {
               type: 'dynamic-tool',
               toolCallId: `demo-call-carousel-${Date.now()}`,
@@ -67,7 +72,7 @@ export function useChat() {
               state: 'output-available',
               input: {},
               output: {},
-            } as any
+            } as unknown as UIMessage['parts'][number]
           ]
         }
       ]);
@@ -76,7 +81,9 @@ export function useChat() {
         ...currentMessages,
         {
           id: `demo-${Date.now()}`,
-          role: 'assistant', content: '', parts: [
+          role: 'assistant',
+          content: '',
+          parts: [
             {
               type: 'dynamic-tool',
               toolCallId: `demo-call-projects-${Date.now()}`,
@@ -101,7 +108,7 @@ export function useChat() {
                   },
                 ]
               },
-            } as any
+            } as unknown as UIMessage['parts'][number]
           ]
         }
       ]);

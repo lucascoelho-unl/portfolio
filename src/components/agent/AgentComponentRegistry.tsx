@@ -46,7 +46,9 @@ export default function AgentComponentRegistry({ part }: AgentComponentRegistryP
 
   const output = (dynamicPart.output || toolInvocation?.result || dynamicPart.result || {}) as Record<string, unknown>;
 
-  console.log('[REGISTRY PART IN]', dynamicPart, 'parsed toolName:', toolName);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[REGISTRY PART IN]', dynamicPart, 'parsed toolName:', toolName);
+  }
 
   if (toolName.includes('skill')) {
     const categories = ((output?.categories as SkillCategory[]) && (output.categories as SkillCategory[]).length > 0)
