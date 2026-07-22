@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "AI-Powered Portfolio & Interactive Showcase",
+  title: "Lucas Coelho",
+  description: "AI-Powered Portfolio & Interactive Showcase of Lucas Coelho",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
