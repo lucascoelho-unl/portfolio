@@ -2,6 +2,18 @@ import { mastra } from '../../../mastra';
 import { createUIMessageStream, createUIMessageStreamResponse, UIMessage, UIMessageChunk } from 'ai';
 import { toAISdkStream } from '@mastra/ai-sdk';
 
+export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
+
+// Ensure Gemini API key fallback environment variable is populated
+if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+  const key = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+  if (key) {
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY = key;
+    process.env.GOOGLE_API_KEY = key;
+  }
+}
+
 // TODO: Customize this fallback message for when the AI API quota is exceeded.
 const QUOTA_FALLBACK_MESSAGE = "I'm currently experiencing high traffic and have run out of API quota. Please check back later!";
 
@@ -12,13 +24,14 @@ export async function POST(req: Request) {
     messages = body.messages || [];
     
     const agent = mastra.getAgent('portfolioAgent');
-    const stream = await agent.stream(messages);
+    const stream = await agent.stream(messages, { untilIdle: true });
     
     const uiMessageStream = createUIMessageStream({
       originalMessages: messages,
       execute: async ({ writer }) => {
         try {
           for await (const part of toAISdkStream(stream, { from: 'agent' })) {
+            console.log('[API ROUTE CHUNK]', JSON.stringify(part));
             await writer.write(part as UIMessageChunk);
           }
         } catch (streamError: unknown) {

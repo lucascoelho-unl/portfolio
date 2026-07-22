@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  serverExternalPackages: ["@duckdb/node-api", "@duckdb/node-bindings", "@mastra/duckdb"],
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

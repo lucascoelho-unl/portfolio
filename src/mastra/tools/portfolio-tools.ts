@@ -5,7 +5,7 @@ import { Project } from '../../types/agent-components';
 
 export const getPortfolioProjectsTool = createTool({
   id: 'get-portfolio-projects',
-  description: 'Get list of featured portfolio projects and work experience',
+  description: 'Get list of featured portfolio projects and work experience card. Use this tool whenever the user message or response relates to projects, applications built, work experience, case studies, software engineering accomplishments, or portfolio items.',
   inputSchema: z.object({
     category: z.string().optional().describe('Optional category filter e.g. web, ai, mobile'),
   }),
@@ -51,7 +51,7 @@ export const getPortfolioProjectsTool = createTool({
 
 export const showSkillsTool = createTool({
   id: 'show-skills',
-  description: 'Displays the developer\'s skills and expertise broken down by category. Use this tool whenever the user asks about skills, stack, technologies, or expertise.',
+  description: 'Displays the developer\'s skills, technologies, and expertise card. Use this tool whenever the user message or response relates to skills, tech stack, programming languages, tools, frameworks, backend/frontend development, or technical capabilities.',
   inputSchema: z.object({}),
   outputSchema: z.object({
     categories: z.array(
@@ -69,7 +69,7 @@ export const showSkillsTool = createTool({
 
 export const showCarouselTool = createTool({
   id: 'show-carousel',
-  description: 'Displays an interactive 3D photo carousel featuring developer projects, creations, and visual highlights. Use this tool whenever the user asks to see photos, pictures, images, gallery, or visual work.',
+  description: 'Displays an interactive 3D photo carousel featuring developer projects, creations, photos, and visual highlights card. Use this tool whenever the user message or response relates to photos, pictures, images, photo gallery, visual designs, personal highlights, or visual creations.',
   inputSchema: z.object({}),
   outputSchema: z.object({
     title: z.string().optional(),
